@@ -39,7 +39,7 @@ RETURNS TABLE(
     employee_id INT,
     full_name VARCHAR(100),
     title employee_title,
-    phone_number VARCHAR(15),
+    phone_number VARCHAR(20),
     email VARCHAR(100)
 )
 LANGUAGE plpgsql STABLE AS $$
@@ -69,9 +69,9 @@ RETURNS TABLE(
     diagnosis TEXT,
     services TEXT,
     medications TEXT,
-    total_service_fee NUMERIC(15,2),
-    total_prescription_fee NUMERIC(15,2),
-    final_amount NUMERIC(15,2)
+    total_service_fee NUMERIC(20,2),
+    total_prescription_fee NUMERIC(20,2),
+    final_amount NUMERIC(20,2)
 )
 LANGUAGE plpgsql STABLE AS $$
 BEGIN

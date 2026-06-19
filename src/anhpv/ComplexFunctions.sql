@@ -13,8 +13,8 @@ LANGUAGE plpgsql AS $$
 DECLARE
     v_appointment_id INT;
     v_current_status payment_status;
-    v_total_service NUMERIC(15,2) := 0;
-    v_total_prescription NUMERIC(15,2) := 0;
+    v_total_service NUMERIC(20,2) := 0;
+    v_total_prescription NUMERIC(20,2) := 0;
 BEGIN
     -- Kiểm tra hóa đơn tồn tại và chưa thanh toán
     SELECT appointment_id, payment_status
@@ -66,7 +66,7 @@ $$;
 CREATE OR REPLACE FUNCTION book_appointment(
     p_patient_id INT,
     p_doctor_id INT,
-    p_location_id VARCHAR(50),
+    p_location_id VARCHAR(20),
     p_time TIMESTAMP,
     p_symptoms TEXT DEFAULT NULL
 )
@@ -141,9 +141,9 @@ RETURNS TABLE(
     department_name VARCHAR(100),
     patient_count BIGINT,
     appointment_count BIGINT,
-    total_service_fee NUMERIC(15,2),
-    total_prescription_fee NUMERIC(15,2),
-    total_revenue NUMERIC(15,2)
+    total_service_fee NUMERIC(20,2),
+    total_prescription_fee NUMERIC(20,2),
+    total_revenue NUMERIC(20,2)
 )
 LANGUAGE plpgsql STABLE AS $$
 BEGIN
