@@ -4,16 +4,16 @@
 
 ```
 src/anhpv/
-├── CreateTable.sql         # Định nghĩa CSDL (bảng, khóa ngoại, check)
-├── SimpleFunctions.sql     # 3 tính năng đơn giản (SELECT)
-└── ComplexFunctions.sql    # 3 tính năng phức tạp (kiểm tra + tổng hợp)
+├── create_table.sql         # Định nghĩa CSDL (bảng, khóa ngoại, check)
+├── simple_functions.sql     # 3 tính năng đơn giản (SELECT)
+└── complex_functions.sql    # 3 tính năng phức tạp (kiểm tra + tổng hợp)
 ```
 
 ## Thứ tự chạy
 
-1. `CreateTable.sql`
-2. `SimpleFunctions.sql`
-3. `ComplexFunctions.sql`
+1. `create_table.sql`
+2. `simple_functions.sql`
+3. `complex_functions.sql`
 
 ---
 
