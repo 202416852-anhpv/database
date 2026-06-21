@@ -15,7 +15,7 @@ create table patient
     date_of_birth date,
     gender        gender_value,
     phone_number  char(10),
-    address       varchar(128),
+    address       text,
     created_at    timestamp default current_timestamp,
     updated_at    timestamp default current_timestamp
 );
@@ -85,9 +85,9 @@ create table appointment
     appointment_time timestamp not null, -- use timestamp to store both date and time
     status           appointment_status default 'waiting',
     payment_status   boolean            default false,
-    symptoms         varchar(256),
-    diagnosis        varchar(256),
-    doctor_notes     varchar(256),
+    symptoms         text,
+    diagnosis        text,
+    doctor_notes     text,
     created_at       timestamp          default current_timestamp,
     updated_at       timestamp          default current_timestamp
 );
@@ -111,7 +111,7 @@ create table appointment_supply
     supply_id      int not null,            -- fk(medical_supply)
     primary key (appointment_id, supply_id),-- pk(appointment_id, supply_id)
     quantity       int default 1 check (quantity > 0),
-    instruction    varchar(256)
+    instruction    text
 );
 ------------
 
