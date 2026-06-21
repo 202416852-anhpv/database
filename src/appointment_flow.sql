@@ -1,5 +1,50 @@
 -- -------------------------------------------------------
--- 1. start_appointment: chuyển trạng thái từ waiting -> ongoing
+-- 1. create_appointment: khởi tạo ca khám bệnh
+-- -------------------------------------------------------
+create or replace function create_appointment(
+    p_patient_id int,
+    p_doctor_id int,
+    p_location_id varchar(16),
+    p_appointment_time timestamp,
+    p_symptoms text default null
+)
+returns text
+language plpgsql as $$
+declare
+    v_new_id int;
+begin
+    -- 1. kiểm tra dữ liệu bắt buộc (ví dụ thời gian khám không được để trống)
+    if p_appointment_time is null then
+        return 'error: thời gian hẹn khám không được để trống';
+    end if;
+
+    -- 2. chèn dữ liệu mới vào bảng appointment
+    insert into appointment (
+        patient_id, 
+        doctor_id, 
+        location_id, 
+        appointment_time, 
+        symptoms
+    )
+    values (
+        p_patient_id, 
+        p_doctor_id, 
+        p_location_id, 
+        p_appointment_time, 
+        p_symptoms
+    )
+    returning appointment_id into v_new_id;
+
+    -- 3. trả về thông báo kèm id vừa tạo để frontend/backend tiện sử dụng
+    return 'ok: tạo lịch hẹn khám thành công. mã lịch hẹn: ' || v_new_id;
+end;
+$$;
+
+-- test start_appointment
+select create_appointment(10, 20, 'A-001', '2026-06-26 10:30:00');
+
+-- -------------------------------------------------------
+-- 2. start_appointment: chuyển trạng thái từ waiting -> ongoing
 -- -------------------------------------------------------
 create or replace function start_appointment(p_appointment_id int)
 returns text
@@ -31,7 +76,7 @@ select start_appointment(1);  -- chỉ có thể bắt đầu ca khám có trạ
 select start_appointment(5);   -- thành công
 
 -- -------------------------------------------------------
--- 2. add_service_to_appointment: thêm dịch vụ vào lịch hẹn
+-- 3. add_service_to_appointment: thêm dịch vụ vào lịch hẹn
 -- -------------------------------------------------------
 create or replace function add_service_to_appointment(
     p_appointment_id int,
@@ -83,7 +128,7 @@ select add_service_to_appointment(3, 1, 2, 'huyết áp bình thường'); -- th
 select * from appointment_service where appointment_id = 3; -- kiểm tra dịch vụ đã thêm thành công
 
 -- -------------------------------------------------------
--- 3. add_supply_to_appointment: thêm thuốc/vật tư
+-- 4. add_supply_to_appointment: thêm thuốc/vật tư
 --    kiểm tra tồn kho trước khi thêm
 -- -------------------------------------------------------
 create or replace function add_supply_to_appointment(
@@ -144,7 +189,7 @@ select quantity_in_stock from medical_supply where supply_id = 100; -- kiểm tr
 select * from appointment_supply where appointment_id = 4 and supply_id = 100; -- kiểm tra kết quả
 
 -- -------------------------------------------------------
--- 4. finish_appointment: ongoing → finished
+-- 5. finish_appointment: ongoing → finished
 --    ghi chẩn đoán + giảm tồn kho thuốc đã kê
 -- -------------------------------------------------------
 create or replace function finish_appointment(
