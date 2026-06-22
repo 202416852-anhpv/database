@@ -9,7 +9,7 @@ create function get_appointments_of_doctor(dr_id int, on_date date default curre
                 status           appointment_status
             )
     language plpgsql
-    stable security invoker
+    stable
 as
 $$
 begin
@@ -34,7 +34,7 @@ create function get_appointments_by_status(a_status appointment_status, on_date 
                 appointment_time timestamp
             )
     language plpgsql
-    stable security invoker
+    stable
 as
 $$
 begin
